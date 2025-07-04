@@ -34,3 +34,5 @@ Thumbs.db
 
 #Test class
 teste.py
+
+*.txt
