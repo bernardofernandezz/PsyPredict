@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  jupyter:
+    build: .
+    command: jupyter notebook --ip=0.0.0.0 --allow-root --no-browser
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  streamlit:
+    build: .
+    command: streamlit run app_streamlit.py
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  fastapi:
+    build: .
+    command: uvicorn api.app:app --host 0.0.0.0 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    working_dir: /app 

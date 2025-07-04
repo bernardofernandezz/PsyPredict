@@ -1,0 +1,33 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and models
+models/
+archive/*.csv
+*.db
+*.sqlite3
+*.h5
+*.hdf5
+*.parquet
+*.feather
+*.pkl
+*.joblib
+
+# Environment variables
+.env
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# VSCode and system files
+.vscode/
+.DS_Store
+Thumbs.db 

@@ -1,0 +1,36 @@
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, roc_auc_score
+import joblib
+import numpy as np
+
+# Load the preprocessed data
+X_train = pd.read_csv('../archive/X_train.csv')
+X_test = pd.read_csv('../archive/X_test.csv')
+y_train = pd.read_csv('../archive/y_train.csv').squeeze()
+y_test = pd.read_csv('../archive/y_test.csv').squeeze()
+
+# Train Random Forest
+rf = RandomForestClassifier(random_state=42)
+rf.fit(X_train, y_train)
+y_pred_rf = rf.predict(X_test)
+rf_probs = np.array(rf.predict_proba(X_test))
+print("Random Forest:\n", classification_report(y_test, y_pred_rf))
+print("ROC-AUC:", roc_auc_score(y_test, rf_probs[:, 1]))
+
+# Train Logistic Regression
+lr = LogisticRegression(max_iter=1000)
+lr.fit(X_train, y_train)
+y_pred_lr = lr.predict(X_test)
+lr_probs = np.array(lr.predict_proba(X_test))
+print("Logistic Regression:\n", classification_report(y_test, y_pred_lr))
+print("ROC-AUC:", roc_auc_score(y_test, lr_probs[:, 1]))
+
+# Save the best model (choose based on ROC-AUC)
+if roc_auc_score(y_test, rf_probs[:, 1]) >= roc_auc_score(y_test, lr_probs[:, 1]):
+    joblib.dump(rf, "../models/mental_health_rf.pkl")
+    print("Random Forest model saved as ../models/mental_health_rf.pkl")
+else:
+    joblib.dump(lr, "../models/mental_health_lr.pkl")
+    print("Logistic Regression model saved as ../models/mental_health_lr.pkl") 
